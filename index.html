@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Picker</title>
+    <style>
+      .image-picker {
+        border: 2px dashed #ccc;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .thumbnails {
+        display: flex;
+        overflow-x: auto;
+        margin-top: 20px;
+      }
+      .thumbnail {
+        position: relative;
+        margin-right: 10px;
+      }
+      .thumbnail img {
+        width: 100px;
+        height: auto;
+      }
+      .thumbnail .cross {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="imagePicker" class="image-picker">
+      Click or Drop Images Here
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        style="display: none"
+        multiple />
+    </div>
+    <div id="thumbnails" class="thumbnails"></div>
+    <button id="downloadBtn">Download Images</button>
+
+    <script>
+      class ImagePicker {
+        constructor() {
+          this.images = [];
+          this.imagePickerElement = document.getElementById("imagePicker");
+          this.thumbnailsElement = document.getElementById("thumbnails");
+          this.imageInput = document.getElementById("imageInput");
+          this.downloadBtn = document.getElementById("downloadBtn");
+
+          this.imagePickerElement.addEventListener("click", () =>
+            this.imageInput.click()
+          );
+          this.imageInput.addEventListener("change", (e) =>
+            this.handleImageSelection(e.target.files)
+          );
+          this.downloadBtn.addEventListener("click", () =>
+            this.downloadImages()
+          );
+
+          // Drag and Drop
+          ["dragenter", "dragover", "dragleave", "drop"].forEach(
+            (eventName) => {
+              this.imagePickerElement.addEventListener(
+                eventName,
+                (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                },
+                false
+              );
+            }
+          );
+
+          ["dragenter", "dragover"].forEach((eventName) => {
+            this.imagePickerElement.addEventListener(
+              eventName,
+              () => this.imagePickerElement.classList.add("active"),
+              false
+            );
+          });
+
+          ["dragleave", "drop"].forEach((eventName) => {
+            this.imagePickerElement.addEventListener(
+              eventName,
+              () => this.imagePickerElement.classList.remove("active"),
+              false
+            );
+          });
+
+          this.imagePickerElement.addEventListener("drop", (e) =>
+            this.handleImageSelection(e.dataTransfer.files)
+          );
+        }
+
+        handleImageSelection(files) {
+          for (const file of files) {
+            if (this.validateImage(file)) {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                const imageObject = { src: e.target.result, name: file.name };
+                this.images.push(imageObject);
+                this.displayImages();
+              };
+              reader.readAsDataURL(file);
+            }
+          }
+        }
+
+        validateImage(file) {
+          return file.type.startsWith("image/");
+        }
+
+        displayImages() {
+          this.thumbnailsElement.innerHTML = "";
+          this.images.forEach((image, index) => {
+            const div = document.createElement("div");
+            div.className = "thumbnail";
+            div.innerHTML = `<img src="${image.src}" alt="${image.name}"><div class="cross" onclick="imagePicker.removeImage(${index})">X</div>`;
+            this.thumbnailsElement.appendChild(div);
+          });
+        }
+
+        removeImage(index) {
+          this.images.splice(index, 1);
+          this.displayImages();
+        }
+
+        downloadImages() {
+          // Implementation for downloading images as a zip goes here.
+          // This could involve using a library like JSZip and triggering a download.
+          console.log("Download functionality to be implemented");
+        }
+      }
+
+      const imagePicker = new ImagePicker();
+    </script>
+  </body>
+</html>
