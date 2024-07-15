@@ -1,0 +1,88 @@
+:root {
+  --background-color: #f0f0f0;
+  --primary-color: #2a9d8f;
+  --secondary-color: #264653;
+  --text-color: #000;
+  --alert-error-bg: #e76f51;
+  --alert-success-bg: #2a9d8f;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.image-picker {
+  border: 2px dashed var(--primary-color);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.image-picker:hover {
+  box-shadow: inset 0 0 4px rgba(102, 149, 183, 0.84);
+}
+
+.image-picker.success {
+  box-shadow: 0 0 10px 2px green;
+}
+
+.image-picker.plain {
+  width: 300px;
+}
+
+.image-picker.component {
+  width: 50%;
+  height: 50vh;
+}
+
+.image-picker.app {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnails {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.thumbnail {
+  position: relative;
+  margin-right: 10px;
+}
+
+.thumbnail img {
+  width: 100px;
+  height: auto;
+}
+
+.thumbnail .cross {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--alert-error-bg);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  display: none;
+}

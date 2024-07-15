@@ -5,7 +5,9 @@ class Alert {
 
   show(message, isError = true) {
     this.alertElement.textContent = message;
-    this.alertElement.style.backgroundColor = isError ? "red" : "green";
+    this.alertElement.style.backgroundColor = isError
+      ? "var(--alert-error-bg)"
+      : "var(--alert-success-bg)";
     this.alertElement.style.display = "block";
     setTimeout(() => {
       this.alertElement.style.display = "none";
@@ -30,14 +32,23 @@ class Thumbnail {
 }
 
 class ImagePicker {
-  constructor(duplicatePolicy = { type: "none", max: 1 }) {
+  constructor(
+    duplicatePolicy = { type: "none", max: 1 },
+    style = "app",
+    theme = {}
+  ) {
     this.images = [];
     this.duplicatePolicy = duplicatePolicy;
+    this.style = style;
+    this.theme = theme;
     this.imagePickerElement = document.getElementById("imagePicker");
     this.thumbnailsElement = document.getElementById("thumbnails");
     this.imageInput = document.getElementById("imageInput");
     this.downloadBtn = document.getElementById("downloadBtn");
     this.alert = new Alert();
+
+    this.applyTheme();
+    this.applyStyle();
 
     this.imagePickerElement.addEventListener("click", () =>
       this.imageInput.click()
@@ -78,6 +89,17 @@ class ImagePicker {
     this.imagePickerElement.addEventListener("drop", (e) =>
       this.handleImageSelection(e.dataTransfer.files)
     );
+  }
+
+  applyTheme() {
+    const root = document.documentElement;
+    Object.keys(this.theme).forEach((key) => {
+      root.style.setProperty(`--${key}`, this.theme[key]);
+    });
+  }
+
+  applyStyle() {
+    this.imagePickerElement.classList.add(this.style);
   }
 
   handleImageSelection(files) {
@@ -149,4 +171,19 @@ class ImagePicker {
   }
 }
 
-const imagePicker = new ImagePicker({ type: "limited", max: 2 });
+// Custom default theme
+const defaultTheme = {
+  "background-color": "#f0f0f0",
+  "primary-color": "#2a9d8f",
+  "secondary-color": "#264653",
+  "text-color": "#000",
+  "alert-error-bg": "#e76f51",
+  "alert-success-bg": "#2a9d8f",
+};
+
+// Instantiate the ImagePicker with style and theme parameters
+const imagePicker = new ImagePicker(
+  { type: "limited", max: 2 },
+  "app",
+  defaultTheme
+);
