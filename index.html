@@ -12,32 +12,40 @@
         cursor: pointer;
         transition: box-shadow 0.3s ease-in-out;
       }
-
       .image-picker:hover {
         box-shadow: inset 0 0 4px rgba(102, 149, 183, 0.84);
       }
-
+      .image-picker.success {
+        box-shadow: 0 0 10px 2px green;
+      }
       .thumbnails {
         display: flex;
         overflow-x: auto;
         margin-top: 20px;
       }
-
       .thumbnail {
         position: relative;
         margin-right: 10px;
       }
-
       .thumbnail img {
         width: 100px;
         height: auto;
       }
-
       .thumbnail .cross {
         position: absolute;
         top: 0;
         right: 0;
         cursor: pointer;
+      }
+      .alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: red;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        display: none;
       }
     </style>
   </head>
@@ -53,164 +61,7 @@
     </div>
     <div id="thumbnails" class="thumbnails"></div>
     <button id="downloadBtn">Download Images</button>
-
-    <script>
-      class Thumbnail {
-        constructor(image, index, removeImageCallback) {
-          this.image = image;
-          this.index = index;
-          this.removeImageCallback = removeImageCallback;
-          this.element = this.createElement();
-        }
-
-        createElement() {
-          const element = document.createElement("div");
-          element.className = "thumbnail";
-          element.innerHTML = `
-            <img src="${this.image.src}" alt="${this.image.name}">
-            <div class="cross" onclick="(${this.removeImageCallback})(${this.index})">X</div>
-          `;
-          return element;
-        }
-
-        getElement() {
-          return this.element;
-        }
-      }
-
-      class ImagePicker {
-        constructor(duplicatePolicy = { type: "none", max: 1 }) {
-          this.images = [];
-          this.duplicatePolicy = duplicatePolicy;
-          this.setupElements();
-          this.setupEventListeners();
-        }
-
-        setupElements() {
-          this.imagePickerElement = document.getElementById("imagePicker");
-          this.thumbnailsElement = document.getElementById("thumbnails");
-          this.imageInput = document.getElementById("imageInput");
-          this.downloadBtn = document.getElementById("downloadBtn");
-        }
-
-        setupEventListeners() {
-          this.imagePickerElement.addEventListener("click", () =>
-            this.imageInput.click()
-          );
-          this.imageInput.addEventListener("change", (e) =>
-            this.handleImageSelection(e.target.files)
-          );
-          this.downloadBtn.addEventListener("click", () =>
-            this.downloadImages()
-          );
-
-          ["dragenter", "dragover", "dragleave", "drop"].forEach(
-            (eventName) => {
-              this.imagePickerElement.addEventListener(
-                eventName,
-                this.preventDefaults,
-                false
-              );
-            }
-          );
-
-          ["dragenter", "dragover"].forEach((eventName) => {
-            this.imagePickerElement.addEventListener(
-              eventName,
-              () => this.imagePickerElement.classList.add("active"),
-              false
-            );
-          });
-
-          ["dragleave", "drop"].forEach((eventName) => {
-            this.imagePickerElement.addEventListener(
-              eventName,
-              () => this.imagePickerElement.classList.remove("active"),
-              false
-            );
-          });
-
-          this.imagePickerElement.addEventListener("drop", (e) =>
-            this.handleImageSelection(e.dataTransfer.files)
-          );
-        }
-
-        preventDefaults(e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-
-        handleImageSelection(files) {
-          Array.from(files).forEach((file) => {
-            if (this.validateImage(file)) {
-              this.readImageFile(file);
-            }
-          });
-        }
-
-        validateImage(file) {
-          return file.type.startsWith("image/");
-        }
-
-        readImageFile(file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const imageObject = { src: e.target.result, name: file.name };
-            if (this.canAddImage(imageObject)) {
-              this.images.push(imageObject);
-              this.displayImages();
-            }
-          };
-          reader.readAsDataURL(file);
-        }
-
-        canAddImage(image) {
-          switch (this.duplicatePolicy.type) {
-            case "none":
-              return !this.images.some((img) => img.src === image.src);
-            case "limited":
-              const count = this.images.filter(
-                (img) => img.src === image.src
-              ).length;
-              return count < this.duplicatePolicy.max;
-            case "no-consecutive":
-              return (
-                this.images.length === 0 ||
-                this.images[this.images.length - 1].src !== image.src
-              );
-            default:
-              return true;
-          }
-        }
-
-        displayImages() {
-          this.thumbnailsElement.innerHTML = "";
-          this.images.forEach((image, index) => {
-            const thumbnail = new Thumbnail(
-              image,
-              index,
-              this.removeImage.bind(this)
-            );
-            this.thumbnailsElement.appendChild(thumbnail.getElement());
-          });
-        }
-
-        removeImage(index) {
-          this.images.splice(index, 1);
-          this.displayImages();
-        }
-
-        downloadImages() {
-          // Implementation for downloading images as a zip goes here.
-          // This could involve using a library like JSZip and triggering a download.
-          console.log("Download functionality to be implemented");
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const duplicatePolicy = { type: "limited", max: 2 }; // Change this as needed
-        new ImagePicker(duplicatePolicy);
-      });
-    </script>
+    <div id="alert" class="alert"></div>
+    <script src="image-picker.js"></script>
   </body>
 </html>
