@@ -84,6 +84,7 @@ body {
 
 #imageInput {
   display: none;
+  pointer-events: none;
 }
 
 .image-picker.app {
