@@ -174,39 +174,56 @@ class ImagePicker {
       console.log("Showing loading screen");
       this.showLoadingScreen();
     }
-    for (const file of files) {
+
+    const handleImage = (file) => {
       console.log(`File selected: ${file.name}`);
       if (this.validateImage(file)) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const imageObject = { src: e.target.result, name: file.name };
-          console.log(`Image loaded: ${imageObject.name}`);
-          if (this.canAddImage(imageObject)) {
-            console.log("Image can be added");
-            this.images.push(imageObject);
-            this.displayImages();
-            this.showSuccess();
-          } else {
-            console.log("Duplicate image detected");
-            this.alertManager.show("Duplicate image not allowed!", "error");
-            // this.alert.show("Duplicate image not allowed");
-          }
-        };
-        reader.readAsDataURL(file);
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const imageObject = { src: e.target.result, name: file.name };
+            console.log(`Image loaded: ${imageObject.name}`);
+            if (this.canAddImage(imageObject)) {
+              console.log("Image can be added");
+              this.images.push(imageObject);
+              this.displayImages();
+              this.showSuccess();
+              resolve(true);
+            } else {
+              console.log("Duplicate image detected");
+              this.alertManager.show("Duplicate image not allowed!", "error");
+              resolve(false);
+            }
+          };
+          reader.readAsDataURL(file);
+        });
       } else {
         console.log("Invalid file type");
         this.alertManager.show(
           "Invalid file type. Only images are allowed",
           "info"
         );
+        return Promise.resolve(false);
       }
-    }
-    if (files.length > 1) {
-      setTimeout(() => {
-        console.log("Hiding loading screen");
-        this.hideLoadingScreen();
-      }, 2000);
-    }
+    };
+
+    // Convert FileList to Array
+    const fileList = Array.from(files);
+
+    Promise.all(fileList.map((file) => handleImage(file)))
+      .then((results) => {
+        if (fileList.length > 1) {
+          console.log("Hiding loading screen");
+          this.hideLoadingScreen();
+        }
+      })
+      .catch((error) => {
+        console.error("Error handling image selection:", error);
+        if (fileList.length > 1) {
+          console.log("Hiding loading screen due to error");
+          this.hideLoadingScreen();
+        }
+      });
   }
 
   validateImage(file) {
