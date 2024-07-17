@@ -92,6 +92,7 @@ class ImagePicker {
     this.applyStyle();
 
     this.imagePickerElement.addEventListener("click", () => {
+      event.stopPropagation(); // Stop event propagation to parent container
       console.log("Image picker clicked");
       this.imageInput.click();
     });
