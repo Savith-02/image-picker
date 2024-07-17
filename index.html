@@ -4,21 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Picker</title>
+    <link rel="stylesheet" href="alert-manager.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div id="imagePicker" class="image-picker">
-      Click or Drop Images Here
-      <input
-        type="file"
-        id="imageInput"
-        accept="image/*"
-        style="display: none"
-        multiple />
+    <div class="container">
+      <h1 class="header">Image Picker</h1>
+      <div id="imagePicker" class="image-picker">
+        <label for="imageInput">Click or Drop Images Here</label>
+        <input
+          type="file"
+          id="imageInput"
+          accept="image/*"
+          multiple
+          class="hidden-input" />
+      </div>
+      <div id="thumbnails" class="thumbnails"></div>
+      <button id="downloadBtn" class="download-btn">Download Images</button>
+      <div id="alertContainer"></div>
     </div>
-    <div id="thumbnails" class="thumbnails"></div>
-    <button id="downloadBtn">Download Images</button>
-    <div id="alert" class="alert"></div>
+    <script src="alert-manager.js"></script>
     <script src="image-picker.js"></script>
   </body>
 </html>
