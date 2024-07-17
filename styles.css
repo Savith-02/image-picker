@@ -150,63 +150,21 @@ body {
   background-color: var(--secondary-color);
 }
 
-/* Alert Manager styles
-#alertContainer {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.alert {
-  position: relative;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: var(--alert-text-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  animation: fade-in 0.5s;
-}
-
-.alert .message {
-  margin-right: 10px;
-}
-
-.alert .counter {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.alert .close {
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.alert-error {
-  background-color: var(--alert-error-bg);
-}
-
-.alert-success {
-  background-color: var(--alert-success-bg);
-}
-
-.alert-info {
-  background-color: var(--alert-info-bg);
-}
-
-.alert-warning {
-  background-color: var(--alert-warning-bg);
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
   }
-  to {
-    opacity: 1;
+}
+
+/* Media Query for even smaller screens, e.g., phones */
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    padding: 10px;
   }
-} */
+
+  .thumbnails {
+    padding-bottom: 0.5rem;
+  }
+}
