@@ -161,8 +161,19 @@ class ImagePicker {
     this.imagePickerElement.classList.add(this.style);
   }
 
+  showLoadingScreen() {
+    document.getElementById("loadingScreen").style.display = "flex";
+  }
+  hideLoadingScreen() {
+    document.getElementById("loadingScreen").style.display = "none";
+  }
+
   handleImageSelection(files) {
     console.log("Handling image selection");
+    if (files.length > 1) {
+      console.log("Showing loading screen");
+      this.showLoadingScreen();
+    }
     for (const file of files) {
       console.log(`File selected: ${file.name}`);
       if (this.validateImage(file)) {
@@ -189,6 +200,12 @@ class ImagePicker {
           "info"
         );
       }
+    }
+    if (files.length > 1) {
+      setTimeout(() => {
+        console.log("Hiding loading screen");
+        this.hideLoadingScreen();
+      }, 2000);
     }
   }
 
