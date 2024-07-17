@@ -18,7 +18,8 @@
           id="imageInput"
           accept="image/*"
           multiple
-          class="hidden-input" />
+          class="hidden-input"
+          ontouchstart="event.preventDefault()" />
       </div>
       <div id="thumbnails" class="thumbnails"></div>
       <button id="downloadBtn" class="download-btn">Download Images</button>
