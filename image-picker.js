@@ -1,56 +1,3 @@
-// class Alert {
-//   constructor() {
-//     console.log("Initializing Alert");
-//     this.alertElement = document.getElementById("alert");
-//     this.counterElement = document.getElementById("alertCounter");
-//     this.messages = [];
-//     this.timeoutId = null;
-//   }
-
-//   show(message, isError = true) {
-//     console.log(`Showing alert: ${message}, isError: ${isError}`);
-//     this.messages.unshift({ message, isError });
-//     this.updateAlert();
-//     this.startTimeout();
-//   }
-
-//   updateAlert() {
-//     const topMessage = this.messages[0];
-//     if (topMessage) {
-//       this.alertElement.textContent = topMessage.message;
-//       this.alertElement.style.backgroundColor = topMessage.isError
-//         ? "var(--alert-error-bg)"
-//         : "var(--alert-success-bg)";
-//       this.alertElement.style.display = "block";
-//       this.counterElement.textContent = this.messages.length;
-//       this.counterElement.style.display = "block";
-//     } else {
-//       this.alertElement.style.display = "none";
-//       this.counterElement.style.display = "none";
-//     }
-//   }
-//   startTimeout() {
-//     if (this.timeoutId) {
-//       clearTimeout(this.timeoutId);
-//     }
-//     const topMessage = this.messages[0];
-//     if (topMessage) {
-//       const remainingTime = this.timeoutId ? this.timeoutId - Date.now() : 0;
-//       const timeoutDuration = topMessage.isError
-//         ? 5000 + remainingTime
-//         : 3000 + remainingTime;
-//       this.timeoutId = setTimeout(() => {
-//         console.log("Hiding alert");
-//         this.messages.pop();
-//         this.updateAlert();
-//         this.startTimeout();
-//       }, timeoutDuration);
-//     }
-//   }
-// }
-// import { Alert } from "./alert-manager.js";
-// import { AlertManager } from "./alert-manager.js";
-
 class Thumbnail {
   constructor(image, index) {
     console.log(`Creating thumbnail for image: ${image.name}, index: ${index}`);
@@ -91,11 +38,14 @@ class ImagePicker {
     this.applyTheme();
     this.applyStyle();
 
-    this.imagePickerElement.addEventListener("click", () => {
-      event.stopPropagation(); // Stop event propagation to parent container
-      console.log("Image picker clicked");
+    this.imagePickerElement.addEventListener("mousedown", (event) => {
+      if (event.detail !== 1) return; // Check for single left click (detail property)
       this.imageInput.click();
+      event.preventDefault();
+      event.stopPropagation(); // Uncomment if necessary
+      console.log("Image picker clicked");
     });
+
     this.imageInput.addEventListener("change", (e) => {
       console.log("Image input changed");
       this.handleImageSelection(e.target.files);

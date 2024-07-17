@@ -62,20 +62,15 @@ body {
   margin-bottom: 20px;
   max-width: 100%;
   box-sizing: border-box;
-  position: relative;
-  z-index: 2; /* Ensure it's above other elements */
+  /* position: relative; */
 }
-.hidden-input {
-  position: absolute;
-  top: 0;
-  left: 0;
+.hdden-input {
+  /* top: 0;
+  left: 0; */
   width: 100%;
   height: 100%;
   opacity: 0;
   cursor: pointer;
-  z-index: 1;
-  pointer-events: none;
-  touch-action: none;
 }
 .image-picker:hover {
   box-shadow: inset 0 0 10px var(--primary-color);
