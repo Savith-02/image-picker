@@ -62,6 +62,8 @@ body {
   margin-bottom: 20px;
   max-width: 100%;
   box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
   /* position: relative; */
 }
 .hdden-input {
@@ -115,6 +117,8 @@ body {
   margin-bottom: 20px;
   padding: 0.8rem;
   padding-bottom: 1.3rem; /* Add padding to accommodate scrollbar */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .thumbnail {

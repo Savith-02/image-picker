@@ -1,6 +1,6 @@
 class Thumbnail {
   constructor(image, index) {
-    console.log(`Creating thumbnail for image: ${image.name}, index: ${index}`);
+    // console.log(`Creating thumbnail for image: ${image.name}, index: ${index}`);
     this.image = image;
     this.index = index;
     this.element = document.createElement("div");
@@ -23,8 +23,8 @@ class ImagePicker {
   ) {
     console.log("Initializing ImagePicker");
     console.log(`Duplicate policy: ${JSON.stringify(duplicatePolicy)}`);
-    console.log(`Style: ${style}`);
-    console.log(`Theme: ${JSON.stringify(theme)}`);
+    // console.log(`Style: ${style}`);
+    // console.log(`Theme: ${JSON.stringify(theme)}`);
     this.images = [];
     this.duplicatePolicy = duplicatePolicy;
     this.style = style;
@@ -38,19 +38,27 @@ class ImagePicker {
     this.applyTheme();
     this.applyStyle();
 
-    this.imagePickerElement.addEventListener("mousedown", (event) => {
+    this.imagePickerElement.addEventListener("click", (event) => {
       if (event.detail !== 1) return; // Check for single left click (detail property)
-      this.imageInput.click();
-      event.preventDefault();
-      event.stopPropagation(); // Uncomment if necessary
+      // this.handleImageSelection(event.target.files);
+      this.imageInput.click(); // Trigger the file picker
+      this.imageInput.disabled = true; // Disable the input field
+      // event.preventDefault();
+      // event.stopPropagation(); // Uncomment if necessary
       console.log("Image picker clicked");
     });
-
+    this.imageInput.addEventListener("cancel", function () {
+      console.log("Element was cancelled");
+      if (imageInput.disabled) {
+        imageInput.disabled = false;
+      }
+    });
     this.imageInput.addEventListener("change", (e) => {
       console.log("Image input changed");
       this.handleImageSelection(e.target.files);
       // Reset the input value to ensure the change event fires even if the same file is selected again
       e.target.value = "";
+      this.imageInput.disabled = false;
     });
     this.downloadBtn.addEventListener("click", () => {
       console.log("Download button clicked");
@@ -74,7 +82,7 @@ class ImagePicker {
       this.imagePickerElement.addEventListener(
         eventName,
         () => {
-          console.log(`Drag enter/over event: ${eventName}`);
+          // console.log(`Drag enter/over event: ${eventName}`);
           this.imagePickerElement.classList.add("active");
         },
         false
@@ -85,7 +93,7 @@ class ImagePicker {
       this.imagePickerElement.addEventListener(
         eventName,
         () => {
-          console.log(`Drag leave/drop event: ${eventName}`);
+          // console.log(`Drag leave/drop event: ${eventName}`);
           this.imagePickerElement.classList.remove("active");
         },
         false
@@ -93,13 +101,13 @@ class ImagePicker {
     });
 
     this.imagePickerElement.addEventListener("drop", (e) => {
-      console.log("Images dropped");
+      // console.log("Images dropped");
       this.handleImageSelection(e.dataTransfer.files);
     });
   }
 
   applyTheme() {
-    console.log("Applying theme");
+    // console.log("Applying theme");
     const root = document.documentElement;
     Object.keys(this.theme).forEach((key) => {
       root.style.setProperty(`--${key}`, this.theme[key]);
@@ -108,7 +116,7 @@ class ImagePicker {
   }
 
   applyStyle() {
-    console.log(`Applying style: ${this.style}`);
+    // console.log(`Applying style: ${this.style}`);
     this.imagePickerElement.classList.add(this.style);
   }
 
@@ -127,15 +135,15 @@ class ImagePicker {
     }
 
     const handleImage = (file) => {
-      console.log(`File selected: ${file.name}`);
+      // console.log(`File selected: ${file.name}`);
       if (this.validateImage(file)) {
         return new Promise((resolve) => {
           const reader = new FileReader();
           reader.onload = (e) => {
             const imageObject = { src: e.target.result, name: file.name };
-            console.log(`Image loaded: ${imageObject.name}`);
+            // console.log(`Image loaded: ${imageObject.name}`);
             if (this.canAddImage(imageObject)) {
-              console.log("Image can be added");
+              // console.log("Image can be added");
               this.images.push(imageObject);
               this.displayImages();
               this.showSuccess();
@@ -175,10 +183,12 @@ class ImagePicker {
           this.hideLoadingScreen();
         }
       });
+    this.imageInput.disabled = false;
+    console.log("Image input enabled");
   }
 
   validateImage(file) {
-    console.log(`Validating image: ${file.name}`);
+    // console.log(`Validating image: ${file.name}`);
     return file.type.startsWith("image/");
   }
 
@@ -206,12 +216,12 @@ class ImagePicker {
   }
 
   displayImages() {
-    console.log("Displaying images");
+    // console.log("Displaying images");
     this.thumbnailsElement.innerHTML = "";
     this.images.forEach((image, index) => {
       const thumbnail = new Thumbnail(image, index);
       this.thumbnailsElement.appendChild(thumbnail.getElement());
-      console.log(`Thumbnail added for image: ${image.name}`);
+      // console.log(`Thumbnail added for image: ${image.name}`);
     });
   }
 
@@ -222,10 +232,10 @@ class ImagePicker {
   }
 
   showSuccess() {
-    console.log("Showing success indicator");
+    // console.log("Showing success indicator");
     this.imagePickerElement.classList.add("success");
     setTimeout(() => {
-      console.log("Hiding success indicator");
+      // console.log("Hiding success indicator");
       this.imagePickerElement.classList.remove("success");
     }, 1000);
     this.alertManager.show("Image added!", "success");
