@@ -129,10 +129,10 @@ class ImagePicker {
 
   handleImageSelection(files) {
     console.log("Handling image selection");
-    if (files.length > 1) {
-      console.log("Showing loading screen");
-      this.showLoadingScreen();
-    }
+    // if (files.length > 1) {
+    console.log("Showing loading screen");
+    this.showLoadingScreen();
+    // }
 
     const handleImage = (file) => {
       // console.log(`File selected: ${file.name}`);
@@ -178,10 +178,10 @@ class ImagePicker {
       })
       .catch((error) => {
         console.error("Error handling image selection:", error);
-        if (fileList.length > 1) {
-          console.log("Hiding loading screen due to error");
-          this.hideLoadingScreen();
-        }
+        // if (fileList.length > 1) {
+        console.log("Hiding loading screen due to error");
+        this.hideLoadingScreen();
+        // }
       });
     this.imageInput.disabled = false;
     console.log("Image input enabled");
