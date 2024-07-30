@@ -241,10 +241,20 @@ class ImagePicker {
     this.alertManager.show("Image added!", "success");
   }
 
-  downloadImages() {
-    console.log("Download functionality to be implemented");
-    // Implementation for downloading images as a zip goes here.
-    // This could involve using a library like JSZip and triggering a download.
+  downloadImages(file = "file") {
+    if (file === "file") {
+      console.log("Download functionality to be implemented");
+      const jsonData = JSON.stringify(this.images);
+      const blob = new Blob([jsonData], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "imageData.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    } else {
+      return;
+    }
   }
 }
 
