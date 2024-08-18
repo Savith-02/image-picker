@@ -1,5 +1,3 @@
-// alert-manager.js
-
 class Alert {
   constructor(message, type, manager) {
     this.message = message;
@@ -11,7 +9,7 @@ class Alert {
   }
 
   createElement() {
-    const alertElement = document.createElement("div");
+    const alertElement = document.createElement('div');
     alertElement.className = `alert alert-${this.type}`;
     alertElement.innerHTML = `
       <span class="message">${this.message}</span>
@@ -19,17 +17,17 @@ class Alert {
       <span class="close">&times;</span>
     `;
 
-    alertElement.querySelector(".close").addEventListener("click", () => {
+    alertElement.querySelector('.close').addEventListener('click', () => {
       this.dismiss();
     });
 
-    document.getElementById("alertContainer").appendChild(alertElement);
+    document.getElementById('alertContainer').appendChild(alertElement);
     return alertElement;
   }
 
   incrementCounter() {
     this.counter += 1;
-    this.element.querySelector(".counter").textContent = this.counter;
+    this.element.querySelector('.counter').textContent = this.counter;
   }
 
   startTimeout() {
@@ -54,15 +52,15 @@ class AlertManager {
     this.alerts = [];
   }
 
-  show(message, type = "info") {
+  show(message, type = 'info') {
     const existingAlert = this.alerts.find((alert) => alert.type === type);
 
     if (existingAlert) {
       existingAlert.incrementCounter();
       existingAlert.resetTimeout();
-      existingAlert.element.style.animation = "none";
+      existingAlert.element.style.animation = 'none';
       existingAlert.element.offsetHeight; // Trigger reflow
-      existingAlert.element.style.animation = "fade-in 0.5s";
+      existingAlert.element.style.animation = 'fade-in 0.5s';
     } else {
       const alert = new Alert(message, type, this);
       this.alerts.push(alert);
